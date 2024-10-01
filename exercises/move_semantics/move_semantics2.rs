@@ -9,17 +9,20 @@
 
 
 fn main() {
-    let vec0 = Vec::new();
+    let vec0 = Vec::new();                  // vec0 is immutable
 
-    let mut vec1 = fill_vec(vec0.clone());
+    let mut vec1 = fill_vec(vec0.clone());  // vec1 is mutable
 
-    println!("{} has length {}, with contents: `{:?}`", "vec0", vec0.len(), vec0);
+    println!("{} has length {}, with contents: `{:?}`", "vec0", vec0.len(), vec0);   // empty
 
     vec1.push(88);
 
-    println!("{} has length {}, with contents `{:?}`", "vec1", vec1.len(), vec1);
+    println!("{} has length {}, with contents `{:?}`", "vec1", vec1.len(), vec1);    //[22, 44, 66, 88]
 }
 
+// immutable reference
+//? Make 'fill_vec' borrow its argument instead of taking ownership of it,
+//? and then copy the data within the function (vec.clone()) in order to return and owned 'Vec<i32>'
 fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
     let mut vec = vec;
 
