@@ -9,7 +9,6 @@
 // Execute `rustlings hint errors6` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::num::ParseIntError;
 
@@ -24,14 +23,25 @@ impl ParsePosNonzeroError {
     fn from_creation(err: CreationError) -> ParsePosNonzeroError {
         ParsePosNonzeroError::Creation(err)
     }
-    // TODO: add another error conversion function here.
-    // fn from_parseint...
+    fn from_parseint(err: ParseIntError) -> ParsePosNonzeroError {
+        ParsePosNonzeroError::ParseInt(err)
+    }
 }
+//? Below the line that TODO asks you to change, there is an example
+//? of using the 'map_err()' method on a 'Result' to transform one type of 
+//? error into another.
+//? Try using something similar on the 'Result' from parse(). You might
+//? use the '?' operator to return early from the function, or you might
+//? use a 'match' expression, or maybe there's another way
 
+//? map_err(): Maps a Result<T, E> to Result<T, F> by applying a function to a 
+//? contained Err value, leaving an Ok value untouched.
+//? This function can be used to pass through a successful result while handling an error.
 fn parse_pos_nonzero(s: &str) -> Result<PositiveNonzeroInteger, ParsePosNonzeroError> {
     // TODO: change this to return an appropriate error instead of panicking
     // when `parse()` returns an error.
-    let x: i64 = s.parse().unwrap();
+    // let x: i64 = s.parse().unwrap();
+    let x: i64 = s.parse::<i64>().map_err(ParsePosNonzeroError::from_parseint)?;
     PositiveNonzeroInteger::new(x).map_err(ParsePosNonzeroError::from_creation)
 }
 
