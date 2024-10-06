@@ -7,14 +7,20 @@
 // Execute `rustlings hint traits1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
+// The trait AppendBar has only one function, which appends "bar"
+// to any object implementing this trait.
+// Self是一种特殊的类型别名，用来表示当前类型自身，帮助开发者引用当前的类型
+// 而不必明确写出具体的类型名称
 trait AppendBar {
     fn append_bar(self) -> Self;
 }
 
 impl AppendBar for String {
     // TODO: Implement `AppendBar` for type `String`.
+    fn append_bar(self) -> Self {
+        String::from(self + "Bar")
+    }
 }
 
 fn main() {
