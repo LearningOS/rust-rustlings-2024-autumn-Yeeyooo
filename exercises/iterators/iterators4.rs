@@ -3,8 +3,13 @@
 // Execute `rustlings hint iterators4` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
+//? In Rust, you can take another functional approach
+//? computing the factorial elegantly with ranges and iterators
+//? fold: Folds every element into an accumulator by applying an operation
+//? returning the final result.
+//? Folding is useful whenever you have a collection of something, and want to 
+//? produce a single value from it.
 pub fn factorial(num: u64) -> u64 {
     // Complete this function to return the factorial of num
     // Do not use:
@@ -15,6 +20,11 @@ pub fn factorial(num: u64) -> u64 {
     // For an extra challenge, don't use:
     // - recursion
     // Execute `rustlings hint iterators4` for hints.
+
+    //! with ranges and iterators
+    (1..=num).fold(1, |acc, x| {
+        acc * x
+    })
 }
 
 #[cfg(test)]
