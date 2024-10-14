@@ -21,19 +21,25 @@
 //
 // Execute `rustlings hint arc1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 #![forbid(unused_imports)] // Do not change this, (or the next) line.
 use std::sync::Arc;
 use std::thread;
 
 fn main() {
-    let numbers: Vec<_> = (0..100u32).collect();
-    let shared_numbers = // TODO
+    // Try not to create any copies of the 'number' Vec!
+    // Make 'shared_numbers' be an 'Arc' from the numbers vector.
+    // Then, in order to avoid creating a copy of 'numbers'. you'll need to
+    // create 'child_numbers' inside the loop but still in the main thread.
+    let numbers: Vec<_> = (0..100u32).collect();  // number: [0, 1, 2,..., 98, 99]
+    let shared_number = Arc::new(numbers); 
     let mut joinhandles = Vec::new();
 
+    // we would like to use this set of numbers within 8 different threads
+    // simultaneously. Each thread is going to get the sum of every eight value, with an offset
     for offset in 0..8 {
-        let child_numbers = // TODO
+        let child_numbers = Arc::clone(&shared_number);
+
         joinhandles.push(thread::spawn(move || {
             let sum: u32 = child_numbers.iter().filter(|&&n| n % 8 == offset).sum();
             println!("Sum of offset {} is {}", offset, sum);

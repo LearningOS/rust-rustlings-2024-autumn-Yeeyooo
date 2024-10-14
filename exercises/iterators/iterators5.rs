@@ -102,39 +102,39 @@ mod tests {
         }
     }
 
-    // #[test]
-    // fn count_collection_complete() {
-    //     let collection = get_vec_map();
-    //     assert_eq!(
-    //         6,
-    //         count_collection_iterator(&collection, Progress::Complete)
-    //     );
-    // }
+    #[test]
+    fn count_collection_complete() {
+        let collection = get_vec_map();
+        assert_eq!(
+            6,
+            count_collection_iterator(&collection, Progress::Complete)
+        );
+    }
 
-    // #[test]
-    // fn count_collection_some() {
-    //     let collection = get_vec_map();
-    //     assert_eq!(1, count_collection_iterator(&collection, Progress::Some));
-    // }
+    #[test]
+    fn count_collection_some() {
+        let collection = get_vec_map();
+        assert_eq!(1, count_collection_iterator(&collection, Progress::Some));
+    }
 
-    // #[test]
-    // fn count_collection_none() {
-    //     let collection = get_vec_map();
-    //     assert_eq!(4, count_collection_iterator(&collection, Progress::None));
-    // }
+    #[test]
+    fn count_collection_none() {
+        let collection = get_vec_map();
+        assert_eq!(4, count_collection_iterator(&collection, Progress::None));
+    }
 
-    // #[test]
-    // fn count_collection_equals_for() {
-    //     let progress_states = vec![Progress::Complete, Progress::Some, Progress::None];
-    //     let collection = get_vec_map();
+    #[test]
+    fn count_collection_equals_for() {
+        let progress_states = vec![Progress::Complete, Progress::Some, Progress::None];
+        let collection = get_vec_map();
 
-    //     for progress_state in progress_states {
-    //         assert_eq!(
-    //             count_collection_for(&collection, progress_state),
-    //             count_collection_iterator(&collection, progress_state)
-    //         );
-    //     }
-    // }
+        for progress_state in progress_states {
+            assert_eq!(
+                count_collection_for(&collection, progress_state),
+                count_collection_iterator(&collection, progress_state)
+            );
+        }
+    }
 
     fn get_map() -> HashMap<String, Progress> {
         use Progress::*;
