@@ -3,13 +3,14 @@
 // Execute `rustlings hint macros4` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
+// The way macros are written, it wants to see something
+// between each "macro arm", so it can separate them.
 #[rustfmt::skip]
 macro_rules! my_macro {
     () => {
         println!("Check out my macro!");
-    }
+    };
     ($val:expr) => {
         println!("Look at this other macro: {}", $val);
     }
