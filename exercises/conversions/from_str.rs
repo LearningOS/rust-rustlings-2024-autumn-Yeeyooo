@@ -31,7 +31,6 @@ enum ParsePersonError {
     ParseInt(ParseIntError),
 }
 
-// I AM NOT DONE
 
 // Steps:
 // 1. If the length of the provided string is 0, an error should be returned
@@ -49,9 +48,37 @@ enum ParsePersonError {
 // you want to return a string error message, you can do so via just using
 // return `Err("my error message".into())`.
 
+
+// The implementation of FromStr should return an Ok with a Person object
+// This is almost like the "from_into exercise", but returning errors instead
+// hint: You can use the 'map_err' method of 'Result' with a function
+// or closure to wrap the error from 'parse::<usize>'
+// another hint: if you would like to propogate errors by using the '?'
+// operator in you solution, you may refer to the given link.
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        // if the length of the provided string is 0, an error should be returned.
+        if s.len() == 0 {
+            return Err(ParsePersonError::Empty);
+        }
+        // Only 2 elements should be returned from the split, otherwise return an error
+        let parts: Vec<&str> = s.split(',').collect();
+        if parts.len() != 2 {
+            return Err(ParsePersonError::BadLen);
+        }
+
+        // if the length after splitting is 2
+        // check the validity of name and age field
+        let first = parts[0];
+        if first.is_empty() {
+            return Err(ParsePersonError::NoName);
+        }
+
+        let second = parts[1];
+        // propogate the error
+        let age = second.trim().parse::<usize>().map_err(ParsePersonError::ParseInt)?;
+        Ok(Person { name: first.to_string(), age: age })
     }
 }
 
