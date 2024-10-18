@@ -2,7 +2,7 @@
 	double linked list reverse
 	This problem requires you to reverse a doubly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -32,13 +32,13 @@ struct LinkedList<T> {
 }
 
 impl<T> Default for LinkedList<T> {
-    fn default() -> Self {
+    fn default() -> Self {     //? default function: initialize a new LinkedList structure
         Self::new()
     }
 }
 
 impl<T> LinkedList<T> {
-    pub fn new() -> Self {
+    pub fn new() -> Self {     //? Initialization
         Self {
             length: 0,
             start: None,
@@ -73,7 +73,27 @@ impl<T> LinkedList<T> {
         }
     }
 	pub fn reverse(&mut self){
-		// TODO
+        if self.length == 0 || self.length == 1 {
+            return;
+        }
+        self.end = self.start;
+
+        let mut curr_node = self.start;
+        let mut prev_node = unsafe{ (*curr_node.unwrap().as_ptr()).prev};
+
+        while let Some(curr_node_ptr) = curr_node {
+            prev_node = unsafe { (*curr_node_ptr.as_ptr()).prev };
+
+            //? change curr_node.prev
+            unsafe { (*curr_node_ptr.as_ptr()).prev = (*curr_node_ptr.as_ptr()).next };
+            //? change curr_node.next
+            unsafe { (*curr_node_ptr.as_ptr()).next = prev_node};
+
+            //? change curr_node
+            curr_node = unsafe { (*curr_node_ptr.as_ptr()).prev};
+        }
+
+        self.start = unsafe { (*prev_node.unwrap().as_ptr()).prev };
 	}
 }
 

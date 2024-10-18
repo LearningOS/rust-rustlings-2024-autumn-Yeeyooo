@@ -2,11 +2,10 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
-use std::vec::*;
+// use std::vec::*;
 
 #[derive(Debug)]
 struct Node<T> {
@@ -14,7 +13,7 @@ struct Node<T> {
     next: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Node<T> {
+impl<T: PartialOrd + Clone> Node<T> {
     fn new(t: T) -> Node<T> {
         Node {
             val: t,
@@ -29,13 +28,13 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T: PartialOrd + Clone> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T: PartialOrd + Clone> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -44,6 +43,13 @@ impl<T> LinkedList<T> {
         }
     }
 
+    // pub fn into_raw(b: Box<T, A>) -> *mut T
+    // Consumes the Box, returnign a wrapped raw pointer
+
+    // pub const unsafe fn new_unchecked(ptr: *mut T) -> NonNull<T>
+    // Creates a new NonNull
+
+    // as_ptr(): Acquires the underlying *mut pointer
     pub fn add(&mut self, obj: T) {
         let mut node = Box::new(Node::new(obj));
         node.next = None;
@@ -60,23 +66,50 @@ impl<T> LinkedList<T> {
         self.get_ith_node(self.start, index)
     }
 
+    // private helper function
     fn get_ith_node(&mut self, node: Option<NonNull<Node<T>>>, index: i32) -> Option<&T> {
         match node {
             None => None,
             Some(next_ptr) => match index {
                 0 => Some(unsafe { &(*next_ptr.as_ptr()).val }),
-                _ => self.get_ith_node(unsafe { (*next_ptr.as_ptr()).next }, index - 1),
+                _ => self.get_ith_node(unsafe { (*next_ptr.as_ptr()).next }, index - 1),   // 递归查找
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+
+    // This is an associated function
+    pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+        let mut merged_list = LinkedList::new();
+        let mut a_ptr = list_a.start;
+        let mut b_ptr = list_b.start;
+        
+        // `while let` pattern matching
+        while let (Some(a_node), Some(b_node)) = (a_ptr, b_ptr) {
+            let a_val = unsafe { &(*a_node.as_ptr()).val};
+            let b_val = unsafe { &(*b_node.as_ptr()).val};
+
+            if a_val <= b_val {
+                merged_list.add(unsafe{ ((*a_node.as_ptr()).val).clone()});
+                a_ptr = unsafe { (*a_node.as_ptr()).next};
+            }
+            else {
+                merged_list.add(unsafe {((*b_node.as_ptr()).val).clone()});
+                b_ptr = unsafe { (*b_node.as_ptr()).next};
+            }
         }
+
+        while let Some(a_node) = a_ptr {
+            merged_list.add(unsafe {((*a_node.as_ptr()).val).clone()});
+            a_ptr = unsafe { (*a_node.as_ptr()).next};
+        }
+
+        while let Some(b_node) = b_ptr {
+            merged_list.add(unsafe {((*b_node.as_ptr()).val).clone()});
+            b_ptr = unsafe { (*b_node.as_ptr()).next};
+        }
+
+        merged_list
 	}
 }
 

@@ -2,7 +2,6 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -14,6 +13,8 @@ impl fmt::Display for NodeNotInGraph {
     }
 }
 pub struct UndirectedGraph {
+    //? key: String, value: Vec<(String, i32)>
+    //? key represents from_node, (String, i32) represents to_node and weight respectively
     adjacency_table: HashMap<String, Vec<(String, i32)>>,
 }
 impl Graph for UndirectedGraph {
@@ -29,7 +30,16 @@ impl Graph for UndirectedGraph {
         &self.adjacency_table
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
+        //? from_node -> to_node
+        match self.adjacency_table_mutable().get_mut(edge.0) {
+            Some(val) => {val.push((edge.1.to_string(), edge.2));},
+            None => {self.adjacency_table_mutable().insert(edge.0.to_string(), vec![(edge.1.to_string(), edge.2)]);},
+        }
+        //? to_node -> from_node
+        match self.adjacency_table_mutable().get_mut(edge.1) {
+            Some(val) => {val.push((edge.0.to_string(), edge.2))},
+            None => {self.adjacency_table_mutable().insert(edge.1.to_string(), vec![(edge.0.to_string(), edge.2)]);}
+        }
     }
 }
 pub trait Graph {
@@ -38,18 +48,25 @@ pub trait Graph {
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
     fn add_node(&mut self, node: &str) -> bool {
         //TODO
-		true
+        match self.adjacency_table_mutable().insert(node.to_string(), Vec::new()) {
+            Some(_) => false,
+            None => true,
+        }
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        match self.adjacency_table_mutable().get_mut(edge.0) {
+            Some(val) => {val.push((edge.1.to_string(), edge.2));},
+            None => {self.adjacency_table_mutable().insert(edge.0.to_string(), vec![(edge.1.to_string(), edge.2)]);},
+        }
     }
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()
     }
-    fn nodes(&self) -> HashSet<&String> {
+    fn nodes(&self) -> HashSet<&String> {               //? get all nodes in the graph
         self.adjacency_table().keys().collect()
     }
-    fn edges(&self) -> Vec<(&String, &String, i32)> {
+    fn edges(&self) -> Vec<(&String, &String, i32)> {   //? get all edges in the graph
         let mut edges = Vec::new();
         for (from_node, from_node_neighbours) in self.adjacency_table() {
             for (to_node, weight) in from_node_neighbours {
